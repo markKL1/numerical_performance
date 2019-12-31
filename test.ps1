@@ -10,7 +10,7 @@ echo ""
 echo ">> Rust"
 cd ..
 cd rust_simd
-cargo run -q --release -- $N >$null
+cargo run -q --release -- $N
 echo ""
 
 echo ">> done"
