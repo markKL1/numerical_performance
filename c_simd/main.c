@@ -14,14 +14,14 @@ double* make_mat_empty(size_t n) {
     return mat;
 }
 
-double* make_mat_with_data(size_t n) {
+double* make_mat_with_data(size_t n, double s) {
 
     double *mat = make_mat_empty(n);
 
     for (size_t i = 0; i < n; i++) {
         for (size_t j = 0; j < n; j++) {
             double id = (double) i, jd = (double) j;
-            mat[i * n + j] = (id * id) / (jd + 1);
+            mat[i * n + j] = (id * id) / (jd + 1 + s);
         }
     }
 
@@ -35,7 +35,7 @@ double* mat_mul(size_t n, double A[], double B[]) {
     for (size_t i = 0; i < n; i++) {
         for (size_t j = 0; j < n; j++) {
             for (size_t k = 0; k < n; k++) {
-                 C[i * n + j] = A[i * n + k] * A[k * n + j];
+                 C[i * n + j] = A[i * n + k] * B[k * n + j];
             }
         }
     }
@@ -100,16 +100,16 @@ int main(int argc, char *argv[]) {
     }
 
     // Make data.
-    double *A = make_mat_with_data(n);
-    double *B = make_mat_with_data(n);
+    double *A = make_mat_with_data(n, 1.0);
+    double *B = make_mat_with_data(n, 3.0);
 
     // Array multiplication.
     double *C = mat_mul(n, A, B);
 
-    // Determinant.
-    double det = mat_elem_sum(n, C);
+    // Sum elements.
+    double sum = mat_elem_sum(n, C);
 
-    fprintf(stderr, "sum of product elements = %.6f.\n", det);
+    fprintf(stderr, "Sum of product elements = %.6f.\n", sum);
     fflush(stderr);
 }
 
