@@ -39,17 +39,12 @@ function compile_c_simd {
             "-o csimd.exe " +
             "main.c " +
             "-static -lpthread -fopenmp "
-    echo $cmd
 
     $time = Measure-Command { Invoke-Expression "$cmd" }
 
-    echo "compile done (${time})"
-
     if ($dodump.IsPresent) {
         objdump -S -l csimd.exe > objdump.asm
-        echo "objdump done"
     }
-    echo ""
 }
 
 compile_c_simd -opt -dump

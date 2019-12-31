@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 double* make_mat_empty(size_t n) {
 
@@ -103,13 +104,19 @@ int main(int argc, char *argv[]) {
     double *A = make_mat_with_data(n, 1.0);
     double *B = make_mat_with_data(n, 3.0);
 
+    clock_t start = clock();
+
     // Array multiplication.
     double *C = mat_mul(n, A, B);
 
     // Sum elements.
-    double sum = mat_elem_sum(n, C);
+    double sum = mat_elem_sum(n, C) / ((double)n);
+
+    clock_t end = clock();
+    double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 
     fprintf(stderr, "Sum of product elements = %.6f.\n", sum);
+    fprintf(stderr, "Time taken = %.6f second.\n", cpu_time_used);
     fflush(stderr);
 }
 

@@ -1,13 +1,17 @@
 
+$N=1000
+
 echo ">> C"
 cd c_simd
 ./build.ps1
-./csimd.exe 100
+./csimd.exe $N
+echo ""
 
 echo ">> Rust"
 cd ..
 cd rust_simd
-cargo run -- 100
+cargo run -q --release -- $N >$null
+echo ""
 
 echo ">> done"
 cd ..

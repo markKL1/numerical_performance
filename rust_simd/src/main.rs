@@ -1,7 +1,8 @@
 #![allow(non_snake_case)]
 
-use std::process::exit;
-use std::env::args;
+use ::std::process::exit;
+use ::std::env::args;
+use ::std::time::Instant;
 
 fn make_mat_empty(n: usize) -> Vec<f64> {
     vec![0.0; n * n]
@@ -68,11 +69,16 @@ fn main() {
     let A: Vec<f64> = make_mat_with_data(n, 1.0);
     let B: Vec<f64> = make_mat_with_data(n, 3.0);
 
+    let timer = Instant::now();
+
     // Array multiplication.
     let C: Vec<f64> = mat_mul(n, A, B);
 
     // Sum elements.
-    let sum = mat_elem_sum(n, C);
+    let sum = mat_elem_sum(n, C) / (n as f64);
+
+    let cpu_time_used = timer.elapsed().as_nanos() as f64 / 1.0e9;
 
     eprintln!("Sum of product elements = {:.6}.", sum);
+    eprintln!("Time taken = {:.6} second.", cpu_time_used);
 }
