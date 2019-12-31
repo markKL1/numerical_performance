@@ -53,5 +53,4 @@ function compile_c_simd {
 }
 
 compile_c_simd -opt -dump
-./csimd.exe "10"
 

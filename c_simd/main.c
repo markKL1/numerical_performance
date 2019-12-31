@@ -84,7 +84,7 @@ double mat_elem_sum(size_t n, double mat[]) {
 
 int main(int argc, char *argv[]) {
 
-    fprintf(stderr, "Hello world from C.\n");
+    fprintf(stderr, "Hello world from C!\n");
     fflush(stderr);
 
     if (argc <= 1) {
