@@ -30,7 +30,7 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
     for i in 0 .. n {
         for j in 0 .. n {
             for k in 0 .. n {
-                C[i * n + j] = A[i * n + k] * B[k * n + j];
+                C[i * n + j] += A[i * n + k] * B[k * n + j];
             }
         }
     }
