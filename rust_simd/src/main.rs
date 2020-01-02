@@ -3,6 +3,8 @@
 use ::std::process::exit;
 use ::std::env::args;
 use ::std::time::Instant;
+use ::faster::f64s;
+use ::faster::*;
 
 fn make_mat_empty(n: usize) -> Vec<f64> {
     vec![0.0; n * n]
@@ -29,9 +31,12 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
 
     for i in 0 .. n {
         for j in 0 .. n {
-            for k in 0 .. n {
-                 C[i * n + j] = A[i * n + k] * B[k * n + j];
-            }
+            C[i * n + j] = (0 .. n).simd_iter().simd_map(
+                f64s(0.0),
+                //TODO @mverleg: probably too big jumps on the second matrix here...
+                //|k| A[i * n + k] * B[k * n + j]
+                |k| A[i * n + k] * B[j * n + k]
+            );
         }
     }
 
