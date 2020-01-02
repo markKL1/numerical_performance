@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 
-use ::std::process::exit;
 use ::std::env::args;
+use ::std::process::exit;
 use ::std::time::Instant;
 
 fn make_mat_empty(n: usize) -> Vec<f64> {
@@ -27,10 +27,15 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
 
     let mut C = make_mat_empty(n);
 
-    for i in 0 .. n {
-        for j in 0 .. n {
+    let mut Bc = vec![0.0; n];
+    for j in 0 .. n {
+        for m in 0 .. n {
+            Bc[m] = B[m * n + j];
+        }
+        for i in 0 .. n {
+            let ni = i * n;
             for k in 0 .. n {
-                C[i * n + j] = A[k * n + i] * B[j * n + k];
+                C[ni + j] = A[ni + k] * Bc[k];
             }
         }
     }

@@ -30,6 +30,7 @@ double* make_mat_with_data(size_t n, double s) {
 }
 
 double* mat_mul(size_t n, double A[], double B[]) {
+    // https://rosettacode.org/wiki/Matrix_multiplication#Java
 
     double *C = make_mat_empty(n);
 
