@@ -3,6 +3,7 @@
 use ::std::env::args;
 use ::std::process::exit;
 use ::std::time::Instant;
+use ::std::hint::unreachable_unchecked;
 
 const STEP: usize = 8;
 
@@ -32,15 +33,17 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
     let mut Bc = vec![0.0; n];
     for j in 0 .. n {
         for m in 0 .. n {
-            //TODO @mverleg: unchecked?
-            Bc[m] = B[m * n + j];
+            unsafe {
+                Bc[m] = *B.get_unchecked(m * n + j);
+            }
         }
         for i in 0 .. n {
             let ni = i * n;
             // Deal with the remainder modulo $STEP.
             for k in (n - n % STEP) .. n {
-                //TODO @mverleg: unchecked?
-                C[i * n + j] += A[i * n + k] * Bc[k];
+                unsafe {
+                    C[i * n + j] += A.get_unchecked(i * n + k) * Bc.get_unchecked(k);
+                }
             }
             // Do the rest in steps of $STEP.
             let mut sums = [0.0; STEP];
@@ -48,19 +51,24 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
             loop {
                 k -= STEP;
                 debug_assert!(STEP == 8);
-                if ni + k + STEP - 1 > A.len() || k + STEP - 1 > Bc.len() {
-                    use ::std::hint::unreachable_unchecked;
-                    //TODO @mverleg: why doesn't this import?
-                    unsafe { unreachable_unchecked!(); }
+                // These 'unreachable_unchecked' don't currently seem to accomplish the same as 'get_unchecked'
+                // but I'll leave it here in case it ever works (since there is no 'set_unchecked').
+                if ni + k + STEP >= A.len() {
+                    unsafe { unreachable_unchecked(); }
                 }
-                sums[7] += A[ni + k + 7] * Bc[k + 7];
-                sums[6] += A[ni + k + 6] * Bc[k + 6];
-                sums[5] += A[ni + k + 5] * Bc[k + 5];
-                sums[4] += A[ni + k + 4] * Bc[k + 4];
-                sums[3] += A[ni + k + 3] * Bc[k + 3];
-                sums[2] += A[ni + k + 2] * Bc[k + 2];
-                sums[1] += A[ni + k + 1] * Bc[k + 1];
-                sums[0] += A[ni + k + 0] * Bc[k + 0];
+                if k + STEP >= Bc.len() {
+                    unsafe { unreachable_unchecked(); }
+                }
+                unsafe {
+                    sums[0] += A.get_unchecked(ni + k + 0) * Bc.get_unchecked(k + 0);
+                    sums[1] += A.get_unchecked(ni + k + 1) * Bc.get_unchecked(k + 1);
+                    sums[2] += A.get_unchecked(ni + k + 2) * Bc.get_unchecked(k + 2);
+                    sums[3] += A.get_unchecked(ni + k + 3) * Bc.get_unchecked(k + 3);
+                    sums[4] += A.get_unchecked(ni + k + 4) * Bc.get_unchecked(k + 4);
+                    sums[5] += A.get_unchecked(ni + k + 5) * Bc.get_unchecked(k + 5);
+                    sums[6] += A.get_unchecked(ni + k + 6) * Bc.get_unchecked(k + 6);
+                    sums[7] += A.get_unchecked(ni + k + 7) * Bc.get_unchecked(k + 7);
+                }
                 if k <= 0 {
                     break;
                 }
