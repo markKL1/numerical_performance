@@ -1,5 +1,7 @@
+target
 target/
 **/*.rs.bk
 *.asm
 *.exe
 .idea/
+.cargo-lock

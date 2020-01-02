@@ -1,5 +1,5 @@
 
-$N=1000
+$N=750
 
 echo ">> C"
 cd c_simd
@@ -7,7 +7,13 @@ cd c_simd
 ./csimd.exe $N
 echo ""
 
-echo ">> Rust"
+echo ">> Rust naive"
+cd ..
+cd rust_naive
+cargo run -q --release -- $N
+echo ""
+
+echo ">> Rust simd"
 cd ..
 cd rust_simd
 cargo run -q --release -- $N
