@@ -4,6 +4,8 @@ use ::std::env::args;
 use ::std::process::exit;
 use ::std::time::Instant;
 
+const STEP: usize = 8;
+
 fn make_mat_empty(n: usize) -> Vec<f64> {
     vec![0.0; n * n]
 }
@@ -23,8 +25,6 @@ fn make_mat_with_data(n: usize, s: f64) -> Vec<f64> {
     return mat;
 }
 
-const STEP: usize = 4;
-
 fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
 
     let mut C = make_mat_empty(n);
@@ -32,28 +32,35 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
     let mut Bc = vec![0.0; n];
     for j in 0 .. n {
         for m in 0 .. n {
+            //TODO @mverleg: unchecked?
             Bc[m] = B[m * n + j];
         }
         for i in 0 .. n {
             let ni = i * n;
-            let mut k = n;
-            // Deal with the remainder modulo 4.
+            // Deal with the remainder modulo $STEP.
             for k in (n - n % STEP) .. n {
-                unsafe {
-                    C[ni + j] += A.get_unchecked(ni + k) * Bc.get_unchecked(k);
-                }
+                //TODO @mverleg: unchecked?
+                C[i * n + j] += A[i * n + k] * Bc[k];
             }
-            // Do the rest in steps of 4.
+            // Do the rest in steps of $STEP.
             let mut sums = [0.0; STEP];
+            let mut k = n - (n % STEP);
             loop {
                 k -= STEP;
-                debug_assert!(STEP == 4);
-                unsafe {
-                    sums[0] += A.get_unchecked(ni + k + 0) * Bc.get_unchecked(k + 0);
-                    sums[1] += A.get_unchecked(ni + k + 1) * Bc.get_unchecked(k + 1);
-                    sums[2] += A.get_unchecked(ni + k + 2) * Bc.get_unchecked(k + 2);
-                    sums[3] += A.get_unchecked(ni + k + 3) * Bc.get_unchecked(k + 3);
-                };
+                debug_assert!(STEP == 8);
+                if ni + k + STEP - 1 > A.len() || k + STEP - 1 > Bc.len() {
+                    use ::std::hint::unreachable_unchecked;
+                    //TODO @mverleg: why doesn't this import?
+                    unsafe { unreachable_unchecked!(); }
+                }
+                sums[7] += A[ni + k + 7] * Bc[k + 7];
+                sums[6] += A[ni + k + 6] * Bc[k + 6];
+                sums[5] += A[ni + k + 5] * Bc[k + 5];
+                sums[4] += A[ni + k + 4] * Bc[k + 4];
+                sums[3] += A[ni + k + 3] * Bc[k + 3];
+                sums[2] += A[ni + k + 2] * Bc[k + 2];
+                sums[1] += A[ni + k + 1] * Bc[k + 1];
+                sums[0] += A[ni + k + 0] * Bc[k + 0];
                 if k <= 0 {
                     break;
                 }
