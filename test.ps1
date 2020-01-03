@@ -19,3 +19,9 @@ echo ""
 
 cd "$PSScriptRoot"
 echo ">> done"
+
+
+## Show assembly
+## make sure -Clink-arg=-s in .cargo/config IS NOT enabled (and ideally, -Ctarget-cpu=native IS enabled)
+# cargo build --release ; objdump -dS .\target\release\rust_simd.exe > dump.asm
+
