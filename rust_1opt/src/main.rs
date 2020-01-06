@@ -4,6 +4,7 @@ use ::std::env::args;
 use ::std::process::exit;
 use ::std::time::Instant;
 
+const STEP: usize = 8;
 
 fn make_mat_empty(n: usize) -> Vec<f64> {
     vec![0.0; n * n]
@@ -30,14 +31,30 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
 
     let mut Bc = vec![0.0; n];
     for j in 0 .. n {
-        for m in 0 .. n {
+        for k in 0 .. n {
             unsafe {
-                Bc[m] = *B.get_unchecked(m * n + j);
+                Bc[k] = *B.get_unchecked(k * n + j);
             }
         }
         for i in 0..n {
             let ni = i * n;
-            for k in 0 .. n {
+            let mut k = 0;
+            let stop_simd_at = n - (n % STEP);
+            while k < stop_simd_at {
+                debug_assert!(8 == STEP);
+                unsafe {
+                    C[ni + j] += A.get_unchecked(ni + k + 0) * Bc.get_unchecked(k + 0);
+                    C[ni + j] += A.get_unchecked(ni + k + 1) * Bc.get_unchecked(k + 1);
+                    C[ni + j] += A.get_unchecked(ni + k + 2) * Bc.get_unchecked(k + 2);
+                    C[ni + j] += A.get_unchecked(ni + k + 3) * Bc.get_unchecked(k + 3);
+                    C[ni + j] += A.get_unchecked(ni + k + 4) * Bc.get_unchecked(k + 4);
+                    C[ni + j] += A.get_unchecked(ni + k + 5) * Bc.get_unchecked(k + 5);
+                    C[ni + j] += A.get_unchecked(ni + k + 6) * Bc.get_unchecked(k + 6);
+                    C[ni + j] += A.get_unchecked(ni + k + 7) * Bc.get_unchecked(k + 7);
+                }
+                k += STEP;
+            }
+            for k in stop_simd_at .. n {
                 unsafe {
                     C[ni + j] += A.get_unchecked(ni + k) * Bc.get_unchecked(k);
                 }
