@@ -45,10 +45,6 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
                 .simd_map(|(a, b)| a * b)
                 .simd_reduce(f64s(0.0), |acc, v| acc + v)
                 .sum();
-
-//            for k in 0 .. n {
-//                C[ni + j] += A.get_unchecked(ni + k) * Bc.get_unchecked(k);
-//            }
         }
     }
 
@@ -60,9 +56,9 @@ fn mat_elem_sum(n: usize, mat: Vec<f64>) -> f64 {
     let mut sum = 0.0;
 
     for i in 0 .. n {
-        for j in 0 .. n {
-            sum += mat[i * n + j];
-        }
+        sum += &mat[i * n .. i * n + n].simd_iter(f64s(0.0))
+            .simd_reduce(f64s(0.0), |acc, v| acc + v)
+            .sum();
     }
 
     return sum;
