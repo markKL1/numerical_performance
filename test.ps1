@@ -8,7 +8,7 @@ cd "$PSScriptRoot/c_simd"
 echo ""
 
 echo ">> Rust naive"
-cd "$PSScriptRoot/rust_naive"
+cd "$PSScriptRoot/rust_0naive"
 cargo run -q --release -- $N
 echo ""
 

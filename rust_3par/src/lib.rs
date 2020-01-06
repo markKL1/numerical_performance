@@ -2,11 +2,14 @@
 
 use ::faster::*;
 use ::std::time::Instant;
-use ::rayon::prelude::*;
-
+use ::par_array_init::par_array_init;
+use ::rayon::iter::IntoParallelIterator;
+use ::rayon::iter::ParallelIterator;
 
 fn make_mat_empty(n: usize) -> Vec<f64> {
-    vec![0.0; n * n]
+    let mut v: Vec<f64> = Vec::with_capacity(n * n);
+    unsafe { v.set_len(n * n); }
+    v
 }
 
 pub fn make_mat_with_data(n: usize, s: f64) -> Vec<f64> {
@@ -26,27 +29,64 @@ pub fn make_mat_with_data(n: usize, s: f64) -> Vec<f64> {
 
 pub fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
 
-    let mut C = make_mat_empty(n);
-
-    (0 .. n).into_par_iter().map(|j| {
-        let mut Bc = vec![0.0; n];
-        for m in 0 .. n {
+    let mut BT: Vec<Vec<f64>> = (0 .. n).into_par_iter().map(|j| {
+        let mut Bc = make_mat_empty(n);
+        for m in 0..n {
             unsafe {
                 Bc[m] = *B.get_unchecked(m * n + j);
             }
         }
-        let Bc = Bc;  // immutable
-        for i in 0..n {
-            let ni = i * n;
-            C[ni + j] = (
-                Bc.simd_iter(f64s(0.0)),
-                A[ni .. (ni + n)].simd_iter(f64s(0.0)),
-            ).zip()
-                .simd_map(|(a, b)| a * b)
-                .simd_reduce(f64s(0.0), |acc, v| acc + v)
-                .sum();
-        }
-    });
+        Bc
+    }).collect::<Vec<_>>();
+
+    let mut C = make_mat_empty(n);
+    C.as_mut_slice().into_par_iter().batched();
+//    C.as_mut_slice().into_par_iter()
+//        .batch
+//        .zip((0 .. Array::len()).into_par_iter().map(|i| initializer(i)))
+//        //TODO @mverleg: batched?
+//        .for_each(|dst, src| *dst = src);
+
+
+
+//    let iter = into_iter.into_par_iter();
+//    if Array::len() > iter.len() {
+//        return None;
+//    }
+//    let mut ret: Array = unsafe { std::mem::uninitialized() };
+//    ret.mut_slice()
+//        .into_par_iter()
+//        .zip(iter)
+//        .for_each(|(dst, src)| {
+//            *dst = src;
+//        });
+//    Some(ret);
+//
+//    let C: Vec<f64> = par_array_init(|m| {
+//        dbg!(m);
+//    });
+
+//    par_array_init
+//
+//    (0 .. n).into_par_iter().map(|j| {
+//        let mut Bc = vec![0.0; n];
+//        for m in 0 .. n {
+//            unsafe {
+//                Bc[m] = *B.get_unchecked(m * n + j);
+//            }
+//        }
+//        let Bc = Bc;  // immutable
+//        for i in 0..n {
+//            let ni = i * n;
+//            C[ni + j] = (
+//                Bc.simd_iter(f64s(0.0)),
+//                A[ni .. (ni + n)].simd_iter(f64s(0.0)),
+//            ).zip()
+//                .simd_map(|(a, b)| a * b)
+//                .simd_reduce(f64s(0.0), |acc, v| acc + v)
+//                .sum();
+//        }
+//    });
 
     return C;
 }
