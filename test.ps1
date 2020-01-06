@@ -1,5 +1,5 @@
 
-$N=900
+$N=1000
 
 echo ">> C"
 cd "$PSScriptRoot/c_simd"
