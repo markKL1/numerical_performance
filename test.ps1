@@ -22,6 +22,11 @@ cd "$PSScriptRoot/rust_2simd"
 cargo run -q --release -- $N
 echo ""
 
+echo ">> Rust parallel"
+cd "$PSScriptRoot/rust_3par"
+cargo run -q --release -- $N
+echo ""
+
 cd "$PSScriptRoot"
 echo ">> done"
 
