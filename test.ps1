@@ -12,8 +12,13 @@ cd "$PSScriptRoot/rust_naive"
 cargo run -q --release -- $N
 echo ""
 
+echo ">> Rust opt"
+cd "$PSScriptRoot/rust_1opt"
+cargo run -q --release -- $N
+echo ""
+
 echo ">> Rust simd"
-cd "$PSScriptRoot/rust_opt"
+cd "$PSScriptRoot/rust_2simd"
 cargo run -q --release -- $N
 echo ""
 
