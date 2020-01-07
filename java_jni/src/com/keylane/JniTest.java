@@ -3,7 +3,7 @@ package com.keylane;
 class JniTest {
     // This declares that the static `hello` method will be provided
     // a native library.
-    private static native String hello(String input);
+    private static native double mul(int n);
 
     static {
         // This actually loads the shared object that we'll be creating.
@@ -14,8 +14,7 @@ class JniTest {
 
     // The rest is just regular ol' Java!
     public static void main(String[] args) {
-        String output = JniTest.hello("josh");
+        double output = JniTest.mul(800);
         System.out.println(output);
     }
 }
-

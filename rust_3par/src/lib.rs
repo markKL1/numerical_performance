@@ -1,5 +1,7 @@
 #![allow(non_snake_case)]
 
+mod jni_wrap;
+
 use ::faster::*;
 use ::rayon::iter::IndexedParallelIterator;
 use ::rayon::iter::IntoParallelIterator;

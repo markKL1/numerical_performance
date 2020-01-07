@@ -9,11 +9,11 @@ extern "C" {
 #endif
 /*
  * Class:     com_keylane_JniTest
- * Method:    hello
- * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ * Method:    mul
+ * Signature: (I)D
  */
-JNIEXPORT jstring JNICALL Java_com_keylane_JniTest_hello
-  (JNIEnv *, jclass, jstring);
+JNIEXPORT jdouble JNICALL Java_com_keylane_JniTest_mul
+  (JNIEnv *, jclass, jint);
 
 #ifdef __cplusplus
 }
