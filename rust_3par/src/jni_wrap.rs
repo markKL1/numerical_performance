@@ -1,8 +1,7 @@
-
 use ::jni::JNIEnv;
 use ::jni::objects::{JClass};
 use ::jni::sys::{jint, jdouble};
-use ::matmullib::mul_test;
+use crate::mul_test;
 
 #[no_mangle]
 pub extern "system" fn Java_com_keylane_JniTest_mul(
