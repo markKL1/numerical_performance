@@ -6,3 +6,5 @@ target/
 .idea/
 .cargo-lock
 *.lock
+*.class
+*.jar

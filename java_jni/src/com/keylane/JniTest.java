@@ -1,3 +1,4 @@
+package com.keylane;
 
 class JniTest {
     // This declares that the static `hello` method will be provided
@@ -17,3 +18,4 @@ class JniTest {
         System.out.println(output);
     }
 }
+
