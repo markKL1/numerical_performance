@@ -74,7 +74,7 @@ pub fn mul_test(n: usize) -> (f64, f64) {
     let C: Vec<f64> = mat_mul(n, A, B);
 
     // Sum elements.
-    let sum = mat_elem_sum(n, C) / (n as f64);
+    let sum = mat_elem_sum(n, C) / ((n * n) as f64);
 
     let time_s = timer.elapsed().as_nanos() as f64 / 1.0e9;
 

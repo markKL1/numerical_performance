@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
     double *C = mat_mul(n, A, B);
 
     // Sum elements.
-    double sum = mat_elem_sum(n, C) / ((double)n);
+    double sum = mat_elem_sum(n, C) / ((double)(n * n));
 
     clock_t end = clock();
     double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
