@@ -9,12 +9,14 @@ class JniTest {
         // This actually loads the shared object that we'll be creating.
         // The actual location of the .so or .dll may differ based on your
         // platform.
-        System.loadLibrary("mylib");
+        System.loadLibrary("matmullib");
     }
 
     // The rest is just regular ol' Java!
     public static void main(String[] args) {
-        double output = JniTest.mul(800);
+        int n = Integer.parseInt(args[0]);
+        assert n > 0: "Number of iterations too low";
+        double output = JniTest.mul(n);
         System.out.println(output);
     }
 }

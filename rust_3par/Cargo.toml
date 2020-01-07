@@ -8,7 +8,7 @@ edition = "2018"
 [lib]
 name = "matmullib"
 path = "src/lib.rs"
-crate_type = ["cdylib"]
+crate_type = ["cdylib", "rlib"]
 
 [[bin]]
 name = "matmul"

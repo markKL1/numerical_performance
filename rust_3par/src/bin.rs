@@ -2,8 +2,7 @@
 
 use ::std::env::args;
 use ::std::process::exit;
-use ::matmullib::mul_test;
-
+use crate::mul_test;
 
 fn main() {
     eprintln!("Hello world from Rust!");

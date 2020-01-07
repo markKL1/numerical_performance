@@ -27,6 +27,12 @@ cd "$PSScriptRoot/rust_3par"
 cargo run -q --release -- $N
 echo ""
 
+echo ">> Java (parallel)"
+cd "$PSScriptRoot/java_jni"
+mvn package -DskipTests -q
+java -jar .\target\JniRustTest-development.jar $N
+echo ""
+
 cd "$PSScriptRoot"
 echo ">> done"
 
