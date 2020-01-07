@@ -1,14 +1,11 @@
 #![allow(non_snake_case)]
 
 use ::faster::*;
-use ::std::time::Instant;
-use ::par_array_init::par_array_init;
+use ::rayon::iter::IndexedParallelIterator;
 use ::rayon::iter::IntoParallelIterator;
 use ::rayon::iter::ParallelIterator;
-use ::rayon::iter::IntoParallelRefIterator;
 use ::rayon::slice::ParallelSliceMut;
-
-const STEP: usize = 8;
+use ::std::time::Instant;
 
 fn make_mat_empty(n: usize) -> Vec<f64> {
     let mut v: Vec<f64> = Vec::with_capacity(n * n);
@@ -39,7 +36,8 @@ pub fn make_mat_with_data(n: usize, s: f64) -> Vec<f64> {
 
 pub fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
 
-    let mut BT: Vec<Vec<f64>> = (0 .. n).into_par_iter().map(|j| {
+    // Save a sort-of-transposed version of B, for fast indexing.
+    let BT: Vec<Vec<f64>> = (0 .. n).into_par_iter().map(|j| {
         let mut Bc = make_vec_empty(n);
         for m in 0 .. n {
             unsafe {
@@ -49,23 +47,18 @@ pub fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
         Bc
     }).collect::<Vec<_>>();
 
-    //TODO @mverleg: https://docs.rs/rayon/1.3.0/rayon/slice/trait.ParallelSliceMut.html#tymethod.as_parallel_slice_mut
-
+    // Do the multiplication C = A * B
+    // Outer loop uses threads, and inner loop uses simd (middle loop is normal).
+    // see https://docs.rs/rayon/1.3.0/rayon/slice/trait.ParallelSliceMut.html#tymethod.as_parallel_slice_mut
     let mut C = make_mat_empty(n);
-    //TODO @mverleg: should this be called row or column?
     C.par_chunks_mut(n)
-        .for_each(|row| {
-            let j = 0;  //TODO @mverleg: TEMPORARY! REMOVE THIS!
+        .enumerate()
+        .for_each(|(j, c)| {
             let Bc = &BT[j];
-//            dbg!(Bc.len());  //TODO @mverleg: TEMPORARY! REMOVE THIS!
 
             for i in 0 .. n {
                 let ni = i * n;
-//                println!("n: {}", n);  //TODO @mverleg:
-//                println!("Bc: {}", Bc.simd_iter(f64s(0.0)).len());  //TODO @mverleg:
-//                println!("A slice: {}", A[ni .. (ni + n)].simd_iter(f64s(0.0)).len());  //TODO @mverleg:
-//                panic!();
-                row[j] = (
+                c[j] = (
                     Bc.simd_iter(f64s(0.0)),
                     A[ni .. (ni + n)].simd_iter(f64s(0.0)),
                 ).zip()
