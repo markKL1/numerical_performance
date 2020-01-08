@@ -17,6 +17,5 @@ class JniTest {
         int n = Integer.parseInt(args[0]);
         assert n > 0: "Number of iterations too low";
         double output = JniTest.mul(n);
-        System.out.println(output);
     }
 }
