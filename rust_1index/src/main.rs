@@ -1,10 +1,8 @@
 #![allow(non_snake_case)]
 
-use ::std::env::args;
 use ::std::process::exit;
+use ::std::env::args;
 use ::std::time::Instant;
-
-const STEP: usize = 8;
 
 fn make_mat_empty(n: usize) -> Vec<f64> {
     vec![0.0; n * n]
@@ -29,39 +27,12 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
 
     let mut C = make_mat_empty(n);
 
-    let mut Bc = vec![0.0; n];
-    for j in 0 .. n {
-        for k in 0 .. n {
-            unsafe {
-                Bc[k] = *B.get_unchecked(k * n + j);
-            }
-        }
-        for i in 0..n {
-            let mut sums = [0.0; STEP];
-            let ni = i * n;
-            let nij = ni + j;
-            let mut k = 0;
-            let stop_simd_at = n - (n % STEP);
-            while k < stop_simd_at {
-                debug_assert!(8 == STEP);
-                let nik = ni + k;
-                //TODO @mverleg: how can this simd if they all have the same target?
+    for i in 0 .. n {
+        let ni = i * n;
+        for j in 0 .. n {
+            for k in 0 .. n {
                 unsafe {
-                    sums[0] += A.get_unchecked(nik + 0) * Bc.get_unchecked(k + 0);
-                    sums[1] += A.get_unchecked(nik + 1) * Bc.get_unchecked(k + 1);
-                    sums[2] += A.get_unchecked(nik + 2) * Bc.get_unchecked(k + 2);
-                    sums[3] += A.get_unchecked(nik + 3) * Bc.get_unchecked(k + 3);
-                    sums[4] += A.get_unchecked(nik + 4) * Bc.get_unchecked(k + 4);
-                    sums[5] += A.get_unchecked(nik + 5) * Bc.get_unchecked(k + 5);
-                    sums[6] += A.get_unchecked(nik + 6) * Bc.get_unchecked(k + 6);
-                    sums[7] += A.get_unchecked(nik + 7) * Bc.get_unchecked(k + 7);
-                }
-                k += STEP;
-            }
-            C[nij] = sums.iter().sum();
-            for k in stop_simd_at .. n {
-                unsafe {
-                    C[nij] += A.get_unchecked(ni + k) * Bc.get_unchecked(k);
+                    C[ni + j] += A.get_unchecked(ni + k) * B.get_unchecked(k * n + j);
                 }
             }
         }
