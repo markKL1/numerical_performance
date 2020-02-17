@@ -10,7 +10,7 @@ name = "num_perf_demo"
 path = "src/lib.rs"
 
 [[bin]]
-name = "matmul"
+name = "num_perf_demo"
 path = "src/bin.rs"
 
 [[bench]]

@@ -8,10 +8,10 @@ edition = "2018"
 [lib]
 name = "num_perf_demo"
 path = "src/lib.rs"
-crate_type = ["cdylib", "rlib"]
+#crate_type = ["cdylib", "rlib"]
 
 [[bin]]
-name = "matmul"
+name = "num_perf_demo"
 path = "src/bin.rs"
 
 [[bench]]

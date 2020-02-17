@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# to make assebly dumps, turn on debug symbols, and run
+# find . -name 'num_perf_demo' -o -name 'matmul' | xargs -I{} bash -c 'objdump -dS {} > $(dirname $(dirname $(dirname {})))/dump.asm'
+
 N=1000
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
