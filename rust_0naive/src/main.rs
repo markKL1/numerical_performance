@@ -52,8 +52,6 @@ fn mat_elem_sum(n: usize, mat: Vec<f64>) -> f64 {
 }
 
 fn main() {
-    eprintln!("Hello world from Rust!");
-
     let args: Vec<String> = args().collect();
     if args.len() <= 1 {
         eprintln!("Provide integer argument.");

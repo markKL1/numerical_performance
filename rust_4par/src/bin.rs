@@ -5,8 +5,6 @@ use ::std::process::exit;
 use ::matmullib::mul_test;
 
 fn main() {
-    eprintln!("Hello world from Rust!");
-
     let args: Vec<String> = args().collect();
     if args.len() <= 1 {
         eprintln!("Provide integer argument.");
