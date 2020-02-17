@@ -24,13 +24,18 @@ cd "$DIR/rust_2unroll"
 cargo run -q --release -- $N
 echo ""
 
+echo ">> Rust indep"
+cd "$DIR/rust_3indep"
+cargo run -q --release -- $N
+echo ""
+
 echo ">> Rust simd"
-cd "$DIR/rust_3simd"
+cd "$DIR/rust_4simd"
 cargo run -q --release -- $N
 echo ""
 
 echo ">> Rust parallel"
-cd "$DIR/rust_4par"
+cd "$DIR/rust_5par"
 cargo run -q --release -- $N
 echo ""
 

@@ -1,0 +1,16 @@
+
+[package]
+name = "rust_indep"
+version = "0.1.0"
+authors = ["Mark Verleg <Mark.Verleg@keylane.com>"]
+edition = "2018"
+
+[profile.release]
+opt-level = 3
+#debug = true
+lto = true
+codegen-units = 1
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
