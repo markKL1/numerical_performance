@@ -7,7 +7,7 @@ edition = "2018"
 
 [profile.release]
 opt-level = 3
-#debug = true
+debug = true
 lto = true
 codegen-units = 1
 

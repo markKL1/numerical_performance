@@ -2,7 +2,7 @@
 
 use ::std::env::args;
 use ::std::process::exit;
-use ::matmullib::mul_test;
+use ::num_perf_demo::mul_test;
 
 fn main() {
     let args: Vec<String> = args().collect();
