@@ -1,37 +1,39 @@
 
-$N=5
+$N=1000
 
-#echo ">> C"
-#cd "$PSScriptRoot/c_simd"
-#./build.ps1
-#./csimd.exe $N
-#echo ""
-#
-#echo ">> Rust naive"
-#cd "$PSScriptRoot/rust_0naive"
-#cargo run -q --release -- $N
-#echo ""
-#
-#echo ">> Rust opt"
-#cd "$PSScriptRoot/rust_1opt"
-#cargo run -q --release -- $N
-#echo ""
-#
-#echo ">> Rust simd"
-#cd "$PSScriptRoot/rust_2simd"
-#cargo run -q --release -- $N
-#echo ""
-
-echo ">> Rust parallel"
-cd "$PSScriptRoot/rust_3par"
-cargo build -q --release
-Measure-Command { target/release/matmul.exe $N }
+echo ">> Rust naive"
+cd "$DIR/rust_0naive"
+cargo run -q --release -- $N
 echo ""
 
-echo ">> Java (parallel)"
-cd "$PSScriptRoot/java_jni"
-mvn package -DskipTests -q
-Measure-Command { java -jar .\target\JniRustTest-development.jar $N }
+echo ">> Rust index"
+cd "$DIR/rust_1index"
+cargo run -q --release -- $N
+echo ""
+
+echo ">> Rust unroll"
+cd "$DIR/rust_2unroll"
+cargo run -q --release -- $N
+echo ""
+
+echo ">> Rust layout"
+cd "$DIR/rust_3layout"
+cargo run -q --release -- $N
+echo ""
+
+echo ">> Rust indep"
+cd "$DIR/rust_4indep"
+cargo run -q --release -- $N
+echo ""
+
+echo ">> Rust simd"
+cd "$DIR/rust_5simd"
+cargo run -q --release -- $N
+echo ""
+
+echo ">> Rust parallel"
+cd "$DIR/rust_6par"
+cargo run -q --release -- $N
 echo ""
 
 cd "$PSScriptRoot"
