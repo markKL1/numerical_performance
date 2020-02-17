@@ -35,12 +35,12 @@ cargo run -q --release -- $N
 echo ""
 
 echo ">> Rust simd"
-cd "$DIR/rust_4simd"
+cd "$DIR/rust_5simd"
 cargo run -q --release -- $N
 echo ""
 
 echo ">> Rust parallel"
-cd "$DIR/rust_5par"
+cd "$DIR/rust_6par"
 cargo run -q --release -- $N
 echo ""
 

@@ -6,7 +6,7 @@ authors = ["Mark Verleg <Mark.Verleg@keylane.com>"]
 edition = "2018"
 
 [lib]
-name = "matmullib"
+name = "num_perf_demo"
 path = "src/lib.rs"
 
 [[bin]]
