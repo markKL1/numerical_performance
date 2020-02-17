@@ -4,5 +4,5 @@ rustflags = [
     # Optimize for current CPU.
 	"-C", "target-cpu=native",
 	# Strip symbols from build.
-	"-C", "link-arg=-s",
+	#"-C", "link-arg=-s",
 ]

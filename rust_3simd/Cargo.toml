@@ -19,8 +19,9 @@ path = "src/benchmark.rs"
 harness = false
 
 [profile.release]
+opt-level = 3
+#debug = true
 lto = true
-debug = true
 codegen-units = 1
 
 [dependencies]
