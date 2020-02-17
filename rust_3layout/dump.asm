@@ -1056,7 +1056,7 @@ fn main() {
     447b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
     4480:	49 39 d7             	cmp    %rdx,%r15
     4483:	0f 84 8e 06 00 00    	je     4b17 <_ZN13num_perf_demo4main17haa0faba82560184cE+0xf77>
-                Bc[k] = *B.get_unchecked(k * n + j);
+                *Bc.get_unchecked_mut(k) = *B.get_unchecked(k * n + j);
     4489:	48 8b 01             	mov    (%rcx),%rax
     448c:	48 89 04 d7          	mov    %rax,(%rdi,%rdx,8)
     4490:	48 ff c2             	inc    %rdx

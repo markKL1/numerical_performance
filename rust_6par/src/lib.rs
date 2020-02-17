@@ -43,7 +43,7 @@ pub fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
         let mut Bc = make_vec_empty(n);
         for m in 0 .. n {
             unsafe {
-                Bc[m] = *B.get_unchecked(m * n + j);
+                *Bc.get_unchecked_mut(m) = *B.get_unchecked(m * n + j);
             }
         }
         Bc
@@ -57,7 +57,6 @@ pub fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
         .enumerate()
         .for_each(|(j, c)| {
             let Bc = &BT[j];
-
             for i in 0 .. n {
                 let ni = i * n;
                 c[i] = (
