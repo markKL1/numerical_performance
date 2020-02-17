@@ -29,13 +29,7 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
 
     let mut C = make_mat_empty(n);
 
-    let mut Bc = vec![0.0; n];
     for j in 0 .. n {
-        for k in 0 .. n {
-            unsafe {
-                Bc[k] = *B.get_unchecked(k * n + j);
-            }
-        }
         for i in 0..n {
             let ni = i * n;
             let nij = ni + j;
@@ -44,21 +38,22 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
             while k < stop_simd_at {
                 debug_assert!(8 == STEP);
                 let nik = ni + k;
+                let knj = k * n + j;
                 unsafe {
-                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 0) * Bc.get_unchecked(k + 0);
-                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 1) * Bc.get_unchecked(k + 1);
-                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 2) * Bc.get_unchecked(k + 2);
-                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 3) * Bc.get_unchecked(k + 3);
-                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 4) * Bc.get_unchecked(k + 4);
-                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 5) * Bc.get_unchecked(k + 5);
-                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 6) * Bc.get_unchecked(k + 6);
-                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 7) * Bc.get_unchecked(k + 7);
+                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 0) * B.get_unchecked(knj         );
+                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 1) * B.get_unchecked(knj +      n);
+                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 2) * B.get_unchecked(knj + 2 * n);
+                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 3) * B.get_unchecked(knj + 3 * n);
+                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 4) * B.get_unchecked(knj + 4 * n);
+                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 5) * B.get_unchecked(knj + 5 * n);
+                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 6) * B.get_unchecked(knj + 6 * n);
+                    *C.get_unchecked_mut(nij) += A.get_unchecked(nik + 7) * B.get_unchecked(knj + 7 * n);
                 }
                 k += STEP;
             }
             for k in stop_simd_at .. n {
                 unsafe {
-                    *C.get_unchecked_mut(nij) += A.get_unchecked(ni + k) * Bc.get_unchecked(k);
+                    *C.get_unchecked_mut(nij) += A.get_unchecked(ni + k) * B.get_unchecked(k * n + j);
                 }
             }
         }
