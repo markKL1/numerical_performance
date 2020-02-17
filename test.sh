@@ -19,7 +19,7 @@ cd "$DIR/rust_1index"
 cargo run -q --release -- $N
 echo ""
 
-echo ">> Rust opt"
+echo ">> Rust unroll"
 cd "$DIR/rust_2unroll"
 cargo run -q --release -- $N
 echo ""
