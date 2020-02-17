@@ -13,35 +13,32 @@ There's also some code to see if all this still works through JNI.
 
 Some output::
 
-    >> C
-    optimized build
-    Hello world from C!
-    Sum of product elements = 936451904.627503.
-    Time taken = 2.613000 second.
-
     >> Rust naive
-    Hello world from Rust!
     Sum of product elements = 936451904.627516.
-    Time taken = 3.967146 second.
+    Time taken = 2.697055 second.
 
-    >> Rust opt
-    Hello world from Rust!
+    >> Rust index
     Sum of product elements = 936451904.627516.
-    Time taken = 0.439449 second.
+    Time taken = 1.767311 second.
+
+    >> Rust unroll
+    Sum of product elements = 936451904.627516.
+    Time taken = 1.446898 second.
+
+    >> Rust layout
+    Sum of product elements = 936451904.627516.
+    Time taken = 1.155671 second.
+
+    >> Rust indep
+    Sum of product elements = 936451904.627516.
+    Time taken = 0.327728 second.
 
     >> Rust simd
-    Hello world from Rust!
     Sum of product elements = 936451904.627503.
-    Time taken = 0.575075 second.
+    Time taken = 0.451883 second.
 
     >> Rust parallel
-    Hello world from Rust!
     Sum of product elements = 936451904.627504.
-    Time taken = 0.116171 second.
-
-    >> Java (parallel)
-    Hello world from Rust (JNI)!
-    Sum of product elements = 936451904.627504.
-    Time taken = 0.104442 second.
+    Time taken = 0.073694 second.
 
 I tried to measure JVM overhead, but the difference in Rust and JVM overhead seems to depend on the data size. At tiny matrices, Java takes 75 ms extra, whereas at 1000 items it takes 81 ms, but at large matrices no difference is noticeable.
