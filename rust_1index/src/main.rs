@@ -32,7 +32,7 @@ fn mat_mul(n: usize, A: Vec<f64>, B: Vec<f64>) -> Vec<f64> {
         for j in 0 .. n {
             for k in 0 .. n {
                 unsafe {
-                    C[ni + j] += A.get_unchecked(ni + k) * B.get_unchecked(k * n + j);
+                    *C.get_unchecked_mut(ni + j) += A.get_unchecked(ni + k) * B.get_unchecked(k * n + j);
                 }
             }
         }
